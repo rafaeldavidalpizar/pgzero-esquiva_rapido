@@ -28,9 +28,7 @@ def update(dt):
     if keyboard.a and personaje.x > 20:
         personaje.x -= 15
     elif keyboard.d and personaje.x < WIDTH-20:
-        personaje.x += 15
-    elif keyboard.space:
-        personaje.pos = (50, 220)    
+        personaje.x += 15   
 
     if box.x > -20:
         box.x = box.x - 5
