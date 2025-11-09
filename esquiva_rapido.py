@@ -16,6 +16,7 @@ enemies = []
 sonic_de_correr = ["sonic_de_correr1", "sonic_de_correr2"]
 sonic_iz_correr = ["sonic_iz_correr1", "sonic_iz_correr2"]
 enemy_list = ["enemigo1", "enemigo2", "enemigo3"]
+bullets = []
 indice_correr = 0
 
 
@@ -36,23 +37,45 @@ def create_enemies():
 def move_enemies():
     for enemy in enemies:
         if enemy.x > -20:
-            enemy.x = enemy.x - 7.5
+            enemy.x -= 7.5
         else:
             enemies.remove(enemy)
+
+
+def draw_bullets():
+    for bullet in bullets:
+        bullet.draw()
+
+def create_bullets():
+    new_bullet = Actor("ataque", personaje.pos)
+    bullets.append(new_bullet)
+
+def move_bullets():
+    for bullet in bullets:
+        if bullet.x < WIDTH:
+            bullet.x += 8
+        else:
+            bullets.remove(bullet)
+
 
 
 def draw():
     bk.draw()
     personaje.draw()
     draw_enemies()
+    draw_bullets()
     if gameover == 1:
         go.draw()
     
 def on_key_down(key):
-    if keyboard.space or keyboard.up or keyboard.w:
+    if keyboard.up or keyboard.w:
         personaje.y = 50
         animate(personaje, duration=0.8, y=altura_sonic)
         personaje.image = "sonic_de_salto"
+
+    if keyboard.space:
+        create_bullets()
+
     
     
 def update(dt):
@@ -74,7 +97,8 @@ def update(dt):
 
     create_enemies()
     move_enemies()
-    
+    move_bullets()
+
     # if personaje.colliderect(enemigo1):
     #      gameover = 1
          
