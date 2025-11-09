@@ -15,6 +15,7 @@ enemies = []
 
 sonic_de_correr = ["sonic_de_correr1", "sonic_de_correr2"]
 sonic_iz_correr = ["sonic_iz_correr1", "sonic_iz_correr2"]
+enemy_list = ["enemigo1", "enemigo2", "enemigo3"]
 indice_correr = 0
 
 
@@ -27,8 +28,9 @@ def draw_enemies():
 
 def create_enemies():
     if len(enemies) < 3:
+        random_image_enemy = random.randint(0,2)
         random_pos_x = random.randint(WIDTH + 10, WIDTH + 1000)
-        new_enemy = Actor("enemigo1", (random_pos_x, HEIGHT - 30))
+        new_enemy = Actor(enemy_list[random_image_enemy], (random_pos_x, HEIGHT - 30))
         enemies.append(new_enemy)
 
 def move_enemies():
