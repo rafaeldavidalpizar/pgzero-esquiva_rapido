@@ -56,6 +56,14 @@ def move_bullets():
             bullet.x += 8
         else:
             bullets.remove(bullet)
+def colisiones():
+    for bullet in bullets:
+        for enemy in enemies:
+            if bullet.colliderect(enemy):
+                bullets.remove(bullet)
+                enemies.remove(enemy)
+            
+
 
 
 
@@ -98,9 +106,7 @@ def update(dt):
     create_enemies()
     move_enemies()
     move_bullets()
-
-    # if personaje.colliderect(enemigo1):
-    #      gameover = 1
+    colisiones()
          
         
 pgzrun.go()
