@@ -37,7 +37,7 @@ def create_enemies():
 def move_enemies():
     for enemy in enemies:
         if enemy.x > -20:
-            enemy.x -= 7.5
+            enemy.x -= 9
         else:
             enemies.remove(enemy)
 
@@ -83,12 +83,18 @@ def draw():
         go.draw()
     
 def on_key_down(key):
+    global gameover
     if keyboard.up or keyboard.w:
         personaje.y = 50
         animate(personaje, duration=0.8, y=altura_sonic)
         personaje.image = "sonic_de_salto"
+    elif keyboard.K_RETURN and gameover == 1:
+        gameover = 0
+        personaje.pos = (50, altura_sonic)
+        enemies.clear()
 
-    if keyboard.space:
+
+    elif keyboard.space:
         create_bullets()
 
     
