@@ -41,6 +41,12 @@ def move_enemies():
         else:
             enemies.remove(enemy)
 
+def game_over_verify():
+    global gameover
+    for enemy in enemies:
+        if personaje.colliderect(enemy):
+            gameover = 1
+
 
 def draw_bullets():
     for bullet in bullets:
@@ -68,11 +74,12 @@ def colisiones():
 
 
 def draw():
-    bk.draw()
-    personaje.draw()
-    draw_enemies()
-    draw_bullets()
-    if gameover == 1:
+    if gameover == 0:
+        bk.draw()
+        personaje.draw()
+        draw_enemies()
+        draw_bullets()
+    else:
         go.draw()
     
 def on_key_down(key):
@@ -107,6 +114,6 @@ def update(dt):
     move_enemies()
     move_bullets()
     colisiones()
-         
+    game_over_verify()
         
 pgzrun.go()
