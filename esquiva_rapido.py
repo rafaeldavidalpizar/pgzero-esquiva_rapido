@@ -5,9 +5,17 @@ WIDTH = 600
 HEIGHT = 300
 
 altura_sonic = HEIGHT - 40
+mode = 'menu'
 
-personaje = Actor("sonic_de_ido", (50, altura_sonic))
+sonic_normal = Actor("sonic_de_ido", (50, altura_sonic))
+sonic_super = Actor("super_de_ido", (120, 200))
 go = Actor("go")
+play = Actor("play", (300, 100))
+shop = Actor("tienda", (300, 200))
+collection = Actor("coleccion", (300, 300))
+cross = Actor("cross", (580, 20))
+list_sonic = []
+
 
 gameover = 0
 
@@ -44,7 +52,7 @@ def move_enemies():
 def game_over_verify():
     global gameover
     for enemy in enemies:
-        if personaje.colliderect(enemy):
+        if sonic_normal.colliderect(enemy):
             gameover = 1
 
 
@@ -53,7 +61,7 @@ def draw_bullets():
         bullet.draw()
 
 def create_bullets():
-    new_bullet = Actor("ataque", personaje.pos)
+    new_bullet = Actor("ataque", sonic_normal.pos)
     bullets.append(new_bullet)
 
 def move_bullets():
@@ -74,47 +82,79 @@ def colisiones():
 
 
 def draw():
-    if gameover == 0:
+    if gameover == 0 and mode == "game":
         bk.draw()
-        personaje.draw()
+        sonic_normal.draw()
         draw_enemies()
         draw_bullets()
-    else:
+        cross.draw()
+    elif mode == 'menu':
+        bk.draw()
+        play.draw()
+        shop.draw()
+        collection.draw()
+    elif gameover == 1:
         go.draw()
+    elif mode == 'shop':
+        bk.draw()
+        cross.draw()
+        sonic_super.draw()
+    elif mode == "collection":
+        cross.draw()
     
 def on_key_down(key):
     global gameover
     if keyboard.up or keyboard.w:
-        personaje.y = 50
-        animate(personaje, duration=0.8, y=altura_sonic)
-        personaje.image = "sonic_de_salto"
+        sonic_normal.y = 50
+        animate(sonic_normal, duration=0.8, y=altura_sonic)
+        sonic_normal.image = "sonic_de_salto"
     elif keyboard.K_RETURN and gameover == 1:
         gameover = 0
-        personaje.pos = (50, altura_sonic)
+        sonic_normal.pos = (50, altura_sonic)
         enemies.clear()
-
-
     elif keyboard.space:
         create_bullets()
 
-    
+def on_mouse_down(pos, button):
+    global mode
+    if mode == 'menu' and button == mouse.LEFT:
+        if play.collidepoint(pos):
+            mode = 'game'
+        elif shop.collidepoint(pos):
+            mode = 'shop'
+        elif collection.collidepoint(pos):
+            mode = "collection"
+    elif cross.collidepoint(pos):
+        mode = 'menu'
+    elif cross.collidepoint(pos):
+        mode = 'menu'
+    elif mode == 'menu' and button == mouse.LEFT:
+        if play.collidepoint(pos):
+            mode = 'game'
+        elif shop.collidepoint(pos):
+            mode = 'shop'
+        elif collection.collidepoint(pos):
+            mode = "collection"
+
     
 def update(dt):
     global gameover, indice_correr
-    if keyboard.a and personaje.x > 20:
-        personaje.x -= 10
+    if keyboard.a and sonic_normal.x > 20:
+        sonic_normal.x -= 10
         indice_correr += 1
         if indice_correr > 1:
             indice_correr = 0
-        personaje.image = sonic_iz_correr[indice_correr]
-    elif keyboard.d and personaje.x < WIDTH-20:
-        personaje.x += 10  
+        sonic_normal.image = sonic_iz_correr[indice_correr]
+    elif keyboard.d and sonic_normal.x < WIDTH-20:
+        sonic_normal.x += 10  
         indice_correr += 1
         if indice_correr > 1:
             indice_correr = 0
-        personaje.image = sonic_de_correr[indice_correr]        
-    elif personaje.y == altura_sonic:
-        personaje.image = "sonic_de_ido"
+        sonic_normal.image = sonic_de_correr[indice_correr]        
+    elif sonic_normal.y == altura_sonic:
+        sonic_normal.image = "sonic_de_ido"
+    if mode != "game":
+        enemies.clear()
 
     create_enemies()
     move_enemies()
