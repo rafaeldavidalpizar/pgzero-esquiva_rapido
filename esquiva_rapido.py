@@ -10,12 +10,12 @@ mode = 'menu'
 sonic_normal = Actor("sonic_de_ido", (50, altura_sonic))
 sonic_super = Actor("super_de_ido", (120, 200))
 go = Actor("go")
-play = Actor("play", (300, 100))
-shop = Actor("tienda", (300, 200))
-collection = Actor("coleccion", (300, 300))
+play = Actor("play", (300, 50))
+shop = Actor("tienda", (300, 135))
+collection = Actor("coleccion", (300, 210))
 cross = Actor("cross", (580, 20))
 list_sonic = []
-count = 0
+count = 300
 
 
 gameover = 0
@@ -97,27 +97,32 @@ def colisiones():
 def draw():
     if gameover == 0 and mode == "game":
         bk.draw()
+        screen.draw.text(str(count), center = (30, 50), fontsize = 30)
         if personaje_seleccionado == sonic_normal:
             sonic_normal.draw()
         elif personaje_seleccionado == sonic_super:
             sonic_super.draw()
-        if gameover == 1:
-            go.draw()
         draw_enemies()
         draw_bullets()
         cross.draw()
+    if gameover == 1:
+        go.draw()
     elif mode == 'menu':
         bk.draw()
+        screen.draw.text(str(count), center = (30, 50), fontsize = 30)
         play.draw()
         shop.draw()
         collection.draw()
     elif mode == 'shop':
         bk.draw()
+        screen.draw.text(str(count), center = (30, 50), fontsize = 30)
         cross.draw()
         sonic_super.pos = (120, 200)
         sonic_super.draw()
+        screen.draw.text("$300", center = (120, 245), fontsize = 30)
     elif mode == "collection":
         bk.draw()
+        screen.draw.text(str(count), center = (30, 50), fontsize = 30)
         cross.draw()
         sonic_normal.pos = (120, altura_sonic)
         sonic_super.pos = (400, altura_sonic)
@@ -151,7 +156,7 @@ def on_key_down(key):
         elif keyboard.space:
             create_bullets()
 def on_mouse_down(pos, button):
-    global mode, personaje_seleccionado
+    global mode, personaje_seleccionado, count
     if mode == 'menu' and button == mouse.LEFT:
         if play.collidepoint(pos):
             mode = 'game'
@@ -174,9 +179,10 @@ def on_mouse_down(pos, button):
         personaje_seleccionado = sonic_normal
     elif mode == "collection" and sonic_super.collidepoint(pos):
         personaje_seleccionado = sonic_super
-    if mode == "shop" and sonic_super.collidepoint(pos):
+    if mode == "shop" and sonic_super.collidepoint(pos) and count >= 300 and sonic_super not in personajes_comprados:
         personaje_seleccionado = sonic_super
         personajes_comprados.append(sonic_super)
+        count -= 300
 
 def update(dt):
     global gameover, indice_correr
