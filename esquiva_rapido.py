@@ -17,8 +17,8 @@ shop = Actor("tienda", (300, 135))
 collection = Actor("coleccion", (300, 210))
 cross = Actor("cross", (580, 20))
 list_sonic = []
-count = 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-bullet_count = 1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+count = 0
+bullet_count = 35
 bala_tienda = Actor("bala_tienda", (400, 200))
 
 
@@ -31,8 +31,8 @@ sonic_iz_correr = ["sonic_iz_correr1", "sonic_iz_correr2"]
 enemy_list = ["enemigo1", "enemigo2", "enemigo3", "la_grande_cbn"]
 bullets = []
 indice_correr = 0
-personaje_seleccionado = sonic_super
-personajes_comprados = [sonic_super]
+personaje_seleccionado = sonic_normal
+personajes_comprados = [sonic_normal]
 
 bk = Actor("background1")
 
@@ -100,7 +100,8 @@ def colisiones():
     for bullet in bullets:
         for enemy in enemies:
             if bullet.colliderect(enemy):
-                bullets.remove(bullet)
+                if bullet in bullets:
+                    bullets.remove(bullet)
                 enemies.remove(enemy)
                 count += 1
             
