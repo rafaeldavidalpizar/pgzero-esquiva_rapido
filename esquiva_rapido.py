@@ -211,13 +211,13 @@ def on_mouse_down(pos, button):
 def update(dt):
     global gameover, indice_correr
     if personaje_seleccionado == sonic_normal:
-        if keyboard.a and sonic_normal.x > 20:
+        if (keyboard.a or keyboard.left) and sonic_normal.x > 20:
             sonic_normal.x -= 10
             indice_correr += 1
             if indice_correr > 1:
                 indice_correr = 0
             sonic_normal.image = sonic_iz_correr[indice_correr]
-        elif keyboard.d and sonic_normal.x < WIDTH-20:
+        elif (keyboard.d or keyboard.right) and sonic_normal.x < WIDTH-20:
             sonic_normal.x += 10  
             indice_correr += 1
             if indice_correr > 1:
@@ -228,13 +228,13 @@ def update(dt):
         if mode != "game":
             enemies.clear()
     elif personaje_seleccionado == sonic_super:
-        if keyboard.a and sonic_super.x > 20:
+        if (keyboard.a or keyboard.left) and sonic_super.x > 20:
             sonic_super.x -= 10
             indice_correr += 1
             if indice_correr > 1:
                 indice_correr = 0
             sonic_super.image = "super_iz_correr"
-        elif keyboard.d and sonic_super.x < WIDTH-20:
+        elif (keyboard.d or keyboard.right) and sonic_super.x < WIDTH-20:
             sonic_super.x += 10  
             indice_correr += 1
             if indice_correr > 1:
