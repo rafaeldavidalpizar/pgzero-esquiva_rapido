@@ -17,8 +17,8 @@ shop = Actor("tienda", (300, 135))
 collection = Actor("coleccion", (300, 210))
 cross = Actor("cross", (580, 20))
 list_sonic = []
-count = 0
-bullet_count = 50
+count = 10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+bullet_count = 1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 bala_tienda = Actor("bala_tienda", (400, 200))
 
 
@@ -31,8 +31,8 @@ sonic_iz_correr = ["sonic_iz_correr1", "sonic_iz_correr2"]
 enemy_list = ["enemigo1", "enemigo2", "enemigo3", "la_grande_cbn"]
 bullets = []
 indice_correr = 0
-personaje_seleccionado = sonic_normal
-personajes_comprados = [sonic_normal]
+personaje_seleccionado = sonic_super
+personajes_comprados = [sonic_super]
 
 bk = Actor("background1")
 
@@ -57,7 +57,7 @@ def move_enemies():
     global count
     for enemy in enemies:
         if enemy.x > -20:
-            enemy.x -= 9
+            enemy.x -= 10.5
         else:
             enemies.remove(enemy)
             count += 3
@@ -92,7 +92,7 @@ def create_bullets():
 def move_bullets():
     for bullet in bullets:
         if bullet.x < WIDTH:
-            bullet.x += 8
+            bullet.x += 7.3
         else:
             bullets.remove(bullet)
 def colisiones():
@@ -203,7 +203,7 @@ def on_mouse_down(pos, button):
         personaje_seleccionado = sonic_super
         personajes_comprados.append(sonic_super)
         count -= 300
-    elif mode == "shop" and bala_tienda.collidepoint(pos):
+    elif mode == "shop" and bala_tienda.collidepoint(pos) and count >= 15:
         bullet_count += 20
         count -= 15
 
