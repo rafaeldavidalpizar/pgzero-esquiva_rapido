@@ -7,6 +7,8 @@ HEIGHT = 300
 altura_sonic = HEIGHT - 40
 mode = 'menu'
 
+
+
 sonic_normal = Actor("sonic_de_ido", (50, altura_sonic))
 sonic_super = Actor("super_de_ido", (120, 200))
 go = Actor("go")
@@ -15,7 +17,9 @@ shop = Actor("tienda", (300, 135))
 collection = Actor("coleccion", (300, 210))
 cross = Actor("cross", (580, 20))
 list_sonic = []
-count = 300
+count = 0
+bullet_count = 50
+bala_tienda = Actor("bala_tienda", (400, 200))
 
 
 gameover = 0
@@ -24,7 +28,7 @@ enemies = []
 
 sonic_de_correr = ["sonic_de_correr1", "sonic_de_correr2"]
 sonic_iz_correr = ["sonic_iz_correr1", "sonic_iz_correr2"]
-enemy_list = ["enemigo1", "enemigo2", "enemigo3"]
+enemy_list = ["enemigo1", "enemigo2", "enemigo3", "la_grande_cbn"]
 bullets = []
 indice_correr = 0
 personaje_seleccionado = sonic_normal
@@ -40,16 +44,23 @@ def draw_enemies():
 def create_enemies():
     if len(enemies) < 3:
         random_image_enemy = random.randint(0,2)
+        random_brainrot = random.randint(0,40)
+        if random_brainrot == 1 and mode == "game":
+            random_image_enemy = 3
+            sounds.la_grande_cbn.play()
         random_pos_x = random.randint(WIDTH + 10, WIDTH + 1000)
         new_enemy = Actor(enemy_list[random_image_enemy], (random_pos_x, HEIGHT - 30))
         enemies.append(new_enemy)
+        
 
 def move_enemies():
+    global count
     for enemy in enemies:
         if enemy.x > -20:
             enemy.x -= 9
         else:
             enemies.remove(enemy)
+            count += 3
 
 def game_over_verify():
     global gameover
@@ -68,12 +79,15 @@ def draw_bullets():
         bullet.draw()
 
 def create_bullets():
-    if personaje_seleccionado == sonic_normal:
-        new_bullet = Actor("ataque", sonic_normal.pos)
-        bullets.append(new_bullet)
-    elif personaje_seleccionado == sonic_super:
-        new_bullet = Actor("ataque", sonic_super.pos)
-        bullets.append(new_bullet)
+    global bullet_count
+    if bullet_count > 0:
+        bullet_count -= 1
+        if personaje_seleccionado == sonic_normal:
+            new_bullet = Actor("ataque", sonic_normal.pos)
+            bullets.append(new_bullet)
+        elif personaje_seleccionado == sonic_super:
+            new_bullet = Actor("ataque", sonic_super.pos)
+            bullets.append(new_bullet)
 
 def move_bullets():
     for bullet in bullets:
@@ -94,10 +108,11 @@ def colisiones():
 
 
 
-def draw():
+def draw(): 
     if gameover == 0 and mode == "game":
         bk.draw()
         screen.draw.text(str(count), center = (30, 50), fontsize = 30)
+        screen.draw.text(str(bullet_count), center = (WIDTH - 30, 50), fontsize = 30)
         if personaje_seleccionado == sonic_normal:
             sonic_normal.draw()
         elif personaje_seleccionado == sonic_super:
@@ -110,19 +125,24 @@ def draw():
     elif mode == 'menu':
         bk.draw()
         screen.draw.text(str(count), center = (30, 50), fontsize = 30)
+        screen.draw.text(str(bullet_count), center = (WIDTH - 30, 50), fontsize = 30)
         play.draw()
         shop.draw()
         collection.draw()
     elif mode == 'shop':
         bk.draw()
         screen.draw.text(str(count), center = (30, 50), fontsize = 30)
+        screen.draw.text(str(bullet_count), center = (WIDTH - 30, 50), fontsize = 30)
         cross.draw()
         sonic_super.pos = (120, 200)
         sonic_super.draw()
+        bala_tienda.draw()
         screen.draw.text("$300", center = (120, 245), fontsize = 30)
+        screen.draw.text("$15", center = (400, 245), fontsize = 30)
     elif mode == "collection":
         bk.draw()
         screen.draw.text(str(count), center = (30, 50), fontsize = 30)
+        screen.draw.text(str(bullet_count), center = (WIDTH - 30, 50), fontsize = 30)
         cross.draw()
         sonic_normal.pos = (120, altura_sonic)
         sonic_super.pos = (400, altura_sonic)
@@ -156,7 +176,7 @@ def on_key_down(key):
         elif keyboard.space:
             create_bullets()
 def on_mouse_down(pos, button):
-    global mode, personaje_seleccionado, count
+    global mode, personaje_seleccionado, count, bullet_count
     if mode == 'menu' and button == mouse.LEFT:
         if play.collidepoint(pos):
             mode = 'game'
@@ -183,6 +203,9 @@ def on_mouse_down(pos, button):
         personaje_seleccionado = sonic_super
         personajes_comprados.append(sonic_super)
         count -= 300
+    elif mode == "shop" and bala_tienda.collidepoint(pos):
+        bullet_count += 20
+        count -= 15
 
 def update(dt):
     global gameover, indice_correr
